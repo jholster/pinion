@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" action="">
+	<div class="toolbar">
+		<button type="submit">Save</button>
+		<input type="text" name="content_type" value="{{ resource.content_type }}" placeholder="&lt;content-type&gt;" />
+		<input type="text" name="url" value="{{ resource.url }}" placeholder="&lt;url&gt;" />
+	</div>
+	<div>
+		<textarea name="body" rows="10" cols="30" placeholder="&lt;body&gt;">{{ resource.body }}</textarea>
+	</div>
+</form>
+
+{% endblock %}

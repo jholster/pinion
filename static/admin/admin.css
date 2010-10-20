@@ -1,0 +1,67 @@
+body.admin {
+	margin: 0;
+	padding: 10px;
+	background: #fff;
+	color: #222;
+	font-family: sans-serif;
+	font-size: .85em;
+}
+
+.admin .toolbar {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	right: 10px;
+	padding: 5px;	
+	background-color: #222;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, to(transparent), from(rgba(0, 0, 0, .5)));
+	-webkit-border-radius: 10px;
+	-webkit-box-shadow: rgba(0, 0, 0, .5) 0 .5em 2em;
+}
+
+.admin input[type=text],
+.admin textarea {
+	border: 0;
+	width: 98%;
+	padding: .5em;
+	font-family: monospace;
+}
+
+.admin input[type=text] {
+	font-size: 1.5em;
+	-webkit-border-radius: 10px;
+	width: 75%;
+	background: transparent;
+	color: #fff;
+	padding: 5px;
+}
+
+.admin input[name=url] {
+	width: 55%;
+	float: left;
+}
+
+.admin input[name=content_type] {
+	width: 15%;
+	float: right;
+	margin-right: 10px;
+}
+
+.admin button[type=submit] {
+	float: right;
+	border: 0;
+	background-color: red;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(rgba(0, 0, 0, .35)));
+	-webkit-border-radius: 5px;
+	color: #fff;
+	text-transform: uppercase;
+	padding: 5px 20px;
+	font-size: 1em;
+	text-shadow: rgba(0, 0, 0, .25) 0 0 .2em;
+	cursor: pointer;
+}
+
+.admin textarea {
+	height: 30em;
+	margin-top: 5em;
+}
