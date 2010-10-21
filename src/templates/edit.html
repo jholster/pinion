@@ -23,6 +23,12 @@
 			<option value="{{ ver.key }}"{% ifequal ver.key resource.key %} selected{% endifequal %}>{{ ver.updated|timesince }} ago{% if forloop.first %} (latest){% endif %}</option>
 		{% endfor %}
 		</select>
+		<select name="template">
+			<option value="">(no template)</option>
+		{% for tpl in resource.get_templates %}
+			<option{% ifequal resource.template tpl.url %} selected{% endifequal %}>{{ tpl.url }}</option>
+		{% endfor %}
+		</select>
 	</div>
 	<div>
 		<textarea name="body" rows="10" cols="30" placeholder="&lt;body&gt;">{{ resource.body }}</textarea>

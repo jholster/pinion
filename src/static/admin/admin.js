@@ -25,6 +25,10 @@
 			$('.admin #form-version').submit();
 		});
 
+		$('.admin #form-edit [name=url]').change(function() {
+				window.location.href = $(this).val() + '?edit';
+		});
+
 		$('.admin #form-edit button.cancel').click(function(e) {
 			e.preventDefault();
 			if (edited && ! confirm('Discard changes?')) return;

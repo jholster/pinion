@@ -1,20 +1,52 @@
+import datetime
+import os.path
+
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp import util
-from google.appengine.ext.webapp import template
 from google.appengine.api import users
-import datetime
-import os.path
-import logging
+
+from django.conf import settings
+try:
+	settings.configure(
+		DEBUG=False,
+		TEMPLATE_DEBUG=False,
+		TEMPLATE_LOADERS = (
+			'django.template.loaders.filesystem.load_template_source',
+			'main.load_template_source',
+		),
+	)
+except (EnvironmentError, RuntimeError):
+	pass
+  
+from google.appengine.ext.webapp import template
+from django.template import Template, Context
+from django.template import TemplateDoesNotExist
+	
+def load_template_source(template_name, template_dirs=None):
+	resource = Resource.get_latest(template_name)
+	if resource == None:
+		raise TemplateDoesNotExist, template_name
+	else:
+		return (resource.body, template_name)
+load_template_source.is_usable = True
+
+
+PRIVATE_CONTENT_TYPES = ["text/x-django-template"]
 
 
 class Resource(db.Model):
 	url = db.StringProperty()
 	content_type = db.StringProperty()
+	template = db.StringProperty()
 	body = db.TextProperty()
 	updated = db.DateTimeProperty()
 	latest = db.BooleanProperty(default=True)
-	
+
+	@classmethod
+	def get_latest(cls, path):
+		return Resource.all().filter("url = ", path).filter("latest = ", True).get()
+			
 	def put(self, *args, **kwargs):
 		previous = None
 		if self.latest == True:
@@ -31,20 +63,21 @@ class Resource(db.Model):
 	def guess_content_type(self):
 		types = { ".css": "text/css",
 		          ".js": "text/javascript",
-		          ".txt": "text/plain" }
+		          ".txt": "text/plain",
+		          ".tpl": "text/x-django-template" }
 		suffix = os.path.splitext(self.url)[1]
 		return types.get(suffix, "text/html")
 		
 	def get_versions(self):
 		return Resource.all().filter("url = ", self.url).order("-updated").fetch(500)
 	
-	@classmethod
-	def get_latest(cls, path):
-		return Resource.all().filter("url = ", path).filter("latest = ", True).get()
+	def get_templates(self):
+		return Resource.all() \
+			.filter("content_type = ", "text/x-django-template") \
+			.filter("latest = ", True).order("url").fetch(500)
 
 
 class BaseHandler(webapp.RequestHandler):
-
 	def context(self):
 		return {
 			"request": self.request,
@@ -64,7 +97,6 @@ class BaseHandler(webapp.RequestHandler):
 	
 
 class ResourceHandler(BaseHandler):
-
 	def get(self, path):
 		if users.is_current_user_admin() and self.request.get("edit", None) != None:
 			version = self.request.get("version", None)
@@ -80,9 +112,14 @@ class ResourceHandler(BaseHandler):
 			                           "resource_list": resource_list })
 		else:
 			resource = Resource.get_latest(self.request.path)
-			if resource:
-				self.response.headers["Content-Type"] = resource.content_type
-				self.response.out.write(resource.body)
+			if resource and resource.content_type not in PRIVATE_CONTENT_TYPES:
+				self.response.headers["Content-Type"] = resource.content_type + "; charset=UTF-8"
+				if resource.template:
+					tpl_source = "{%% extends \"%s\" %%}\n%s" % (resource.template, resource.body)
+					tpl = Template(tpl_source)
+					self.response.out.write(tpl.render(Context(self.context())))
+				else:
+					self.response.out.write(resource.body)
 			else:
 				self.not_found()
 
@@ -91,6 +128,7 @@ class ResourceHandler(BaseHandler):
 			resource = Resource()
 			resource.url = self.request.get("url", path)
 			resource.body = self.request.get("body", "")
+			resource.template = self.request.get("template", None)
 			resource.put()
 			self.redirect(resource.url)
 		else:
