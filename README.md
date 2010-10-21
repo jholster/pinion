@@ -12,3 +12,4 @@ How get started:
 1. Grab the source & deploy.
 2. Log in with your Google account at http://yoursite/login
 3. Go to http://yoursite/?edit to create your first page.
+

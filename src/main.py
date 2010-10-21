@@ -2,9 +2,10 @@ import datetime
 import os.path
 
 from google.appengine.ext import webapp
-from google.appengine.ext import db
 from google.appengine.ext.webapp import util
+from google.appengine.ext import db
 from google.appengine.api import users
+from google.appengine.api import memcache
 
 from django.conf import settings
 try:
@@ -46,7 +47,7 @@ class Resource(db.Model):
 	@classmethod
 	def get_latest(cls, path):
 		return Resource.all().filter("url = ", path).filter("latest = ", True).get()
-			
+	
 	def put(self, *args, **kwargs):
 		previous = None
 		if self.latest == True:
@@ -111,7 +112,7 @@ class ResourceHandler(BaseHandler):
 			self.render("edit.html", { "resource": resource,
 			                           "resource_list": resource_list })
 		else:
-			resource = Resource.get_latest(self.request.path)
+			resource = Resource.get_latest(path)
 			if resource and resource.content_type not in PRIVATE_CONTENT_TYPES:
 				self.response.headers["Content-Type"] = resource.content_type + "; charset=UTF-8"
 				if resource.template:
