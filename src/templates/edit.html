@@ -12,6 +12,7 @@
 <form id="form-edit" method="post" action="">
 	<div class="toolbar">
 		<button type="submit">Save</button>
+		<button class="cancel">Cancel</button>
 		<select name="url">
 		{% for res in resource_list %}
 			<option{% ifequal res.url resource.url %} selected{% endifequal %}>{{ res.url }}</option>

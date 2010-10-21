@@ -9,17 +9,26 @@ body.admin {
 
 .admin .toolbar {
 	position: fixed;
-	top: 10px;
-	left: 10px;
-	right: 10px;
-	padding: 5px;	
-	background-color: #222;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, to(transparent), from(rgba(0, 0, 0, .5)));
-	-webkit-border-radius: 10px;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 10px;	
+	background-color: #fff;
+	xbackground-image: -webkit-gradient(linear, 0 0, 0 100%, to(transparent), from(rgba(0, 0, 0, .1)));
+	x-webkit-border-radius: 10px;
 	-webkit-box-shadow: rgba(0, 0, 0, .5) 0 .5em 2em;
 }
 
-.admin input[type=text],
+.admin .toolbar button {
+	float: right;
+	margin-left: 1em;
+}
+
+.admin .toolbar button[type=submit] {
+	padding-left: 3em;
+	padding-right: 3em;
+}
+
 .admin textarea {
 	border: 0;
 	width: 98%;
@@ -27,41 +36,7 @@ body.admin {
 	font-family: monospace;
 }
 
-.admin input[type=text] {
-	font-size: 1.5em;
-	-webkit-border-radius: 10px;
-	width: 75%;
-	background: transparent;
-	color: #fff;
-	padding: 5px;
-}
-
-.admin input[name=url] {
-	width: 55%;
-	float: left;
-}
-
-.admin input[name=content_type] {
-	width: 15%;
-	float: right;
-	margin-right: 10px;
-}
-
-.admin button[type=submit] {
-	float: right;
-	border: 0;
-	background-color: red;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(rgba(0, 0, 0, .35)));
-	-webkit-border-radius: 5px;
-	color: #fff;
-	text-transform: uppercase;
-	padding: 5px 20px;
-	font-size: 1em;
-	text-shadow: rgba(0, 0, 0, .25) 0 0 .2em;
-	cursor: pointer;
-}
-
-.admin textarea {
+.admin textarea[name=body] {
 	height: 30em;
-	margin-top: 5em;
+	margin-top: 4em;
 }

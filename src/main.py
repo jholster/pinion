@@ -33,7 +33,6 @@ class Resource(db.Model):
 		          ".js": "text/javascript",
 		          ".txt": "text/plain" }
 		suffix = os.path.splitext(self.url)[1]
-		#return ["text/html", types.get(suffix)][int(types.has_key(suffix))]
 		return types.get(suffix, "text/html")
 		
 	def get_versions(self):
