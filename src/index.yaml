@@ -12,6 +12,11 @@ indexes:
 
 - kind: Resource
   properties:
+  - name: latest
+  - name: url
+
+- kind: Resource
+  properties:
   - name: url
   - name: updated
 

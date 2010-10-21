@@ -2,11 +2,26 @@
 
 {% block content %}
 
-<form method="post" action="">
+<form id="form-version" method="get" action="">
+	<div>
+		<input type="hidden" name="edit" value="" />
+		<input type="hidden" name="version" value="" />
+	</div>
+</form>
+
+<form id="form-edit" method="post" action="">
 	<div class="toolbar">
 		<button type="submit">Save</button>
-		<input type="text" name="content_type" value="{{ resource.content_type }}" placeholder="&lt;content-type&gt;" />
-		<input type="text" name="url" value="{{ resource.url }}" placeholder="&lt;url&gt;" />
+		<select name="url">
+		{% for res in resource_list %}
+			<option{% ifequal res.url resource.url %} selected{% endifequal %}>{{ res.url }}</option>
+		{% endfor %}
+		</select>
+		<select name="version">
+		{% for ver in resource.get_versions %}
+			<option value="{{ ver.key }}"{% ifequal ver.key resource.key %} selected{% endifequal %}>{{ ver.updated|timesince }} ago{% if forloop.first %} (latest){% endif %}</option>
+		{% endfor %}
+		</select>
 	</div>
 	<div>
 		<textarea name="body" rows="10" cols="30" placeholder="&lt;body&gt;">{{ resource.body }}</textarea>
