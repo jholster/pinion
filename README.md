@@ -1,4 +1,4 @@
-Streamlined CMS for Google App Engine. Aimed at technical people.
+Very lightweight CMS for Google App Engine. Written for jholster.com.
 
 Basic concepts: 
 
